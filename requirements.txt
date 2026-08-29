@@ -1,0 +1,7 @@
+opencv-python
+mediapipe==0.10.21
+numpy
+pygame
+scikit-image
+scikit-learn
+matplotlib
