@@ -905,11 +905,23 @@ st.header(
     "🎥 Live Webcam Detection"
 )
 
+
+
+
+# ============================================================
+# HOW TO USE
+# ============================================================
 ctx = webrtc_streamer(
 
     key="driver-drowsiness-final",
 
     mode=WebRtcMode.SENDRECV,
+
+    rtc_configuration={
+        "iceServers": [
+            {"urls": ["stun:stun.l.google.com:19302"]}
+        ]
+    },
 
     video_processor_factory=
         DrowsinessProcessor,
@@ -921,12 +933,6 @@ ctx = webrtc_streamer(
 
     async_processing=True
 )
-
-
-# ============================================================
-# HOW TO USE
-# ============================================================
-
 st.subheader(
     "How to use"
 )
