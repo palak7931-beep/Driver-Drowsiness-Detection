@@ -1,6 +1,10 @@
+streamlit
+streamlit-webrtc
 opencv-python
 mediapipe==0.10.21
 numpy
+pandas
+av
 pygame
 scikit-image
 scikit-learn
