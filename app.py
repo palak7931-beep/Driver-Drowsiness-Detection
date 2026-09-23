@@ -8,6 +8,7 @@ import mediapipe as mp
 import numpy as np
 import pandas as pd
 import streamlit as st
+from twilio.rest import Client
 from streamlit_webrtc import WebRtcMode, VideoProcessorBase, webrtc_streamer
 
 
@@ -911,17 +912,36 @@ st.header(
 # ============================================================
 # HOW TO USE
 # ============================================================
+twilio_client = Client(
+    st.secrets["TWILIO_ACCOUNT_SID"],
+    st.secrets["TWILIO_AUTH_TOKEN"]
+)
+
+token = twilio_client.tokens.create(ttl=3600)
+
+rtc_configuration = {
+    "iceServers": [
+        {
+            "urls": server["urls"],
+            **(
+                {
+                    "username": server["username"],
+                    "credential": server["credential"]
+                }
+                if "username" in server and "credential" in server
+                else {}
+            )
+        }
+        for server in token.ice_servers
+    ]
+}
 ctx = webrtc_streamer(
 
     key="driver-drowsiness-final",
 
     mode=WebRtcMode.SENDRECV,
 
-    rtc_configuration={
-        "iceServers": [
-            {"urls": ["stun:stun.l.google.com:19302"]}
-        ]
-    },
+    rtc_configuration=rtc_configuration,
 
     video_processor_factory=
         DrowsinessProcessor,
